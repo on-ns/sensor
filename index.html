@@ -10,7 +10,7 @@
   <p id="output"></p>
   <script>
     // WebSocket接続
-    const ws = new WebSocket('ws://<PCのIPアドレス>:8080');
+    const ws = new WebSocket('ws://192.168.11.60:8080');
     const output = document.getElementById('output');
 
     ws.onopen = () => {
