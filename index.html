@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>加速度センサー</title>
+</head>
+<body>
+  <h1>加速度データ送信</h1>
+  <p id="output"></p>
+  <script>
+    // WebSocket接続
+    const ws = new WebSocket('ws://<PCのIPアドレス>:8080');
+    const output = document.getElementById('output');
+
+    ws.onopen = () => {
+      console.log('サーバーに接続しました');
+      output.textContent = 'サーバーに接続しました';
+    };
+
+    ws.onerror = (error) => {
+      console.error('エラー:', error);
+      output.textContent = 'エラーが発生しました';
+    };
+
+    // 加速度データの取得
+    window.addEventListener('devicemotion', (event) => {
+      const accel = {
+        x: event.acceleration.x || 0,
+        y: event.acceleration.y || 0,
+        z: event.acceleration.z || 0
+      };
+      if (ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(accel));
+        output.textContent = `X: ${accel.x}, Y: ${accel.y}, Z: ${accel.z}`;
+      }
+    });
+  </script>
+</body>
+</html>
